@@ -1,0 +1,17 @@
+{
+  "id": "./",
+  "name": "The Fourth Grade — Unit Three",
+  "short_name": "Fourth Grade",
+  "description": "An offline-friendly English prepositions picture game for fourth-grade students.",
+  "lang": "en",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#fff8e8",
+  "theme_color": "#fff8e8",
+  "icons": [
+    {"src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}

@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fff8e8">
+<title>The Fourth Grade — Unit Three</title>
+<style>
+  :root {
+    --navy: #12366f;
+    --navy-deep: #0a2755;
+    --teal: #087d70;
+    --teal-dark: #06665c;
+    --red: #d84b5a;
+    --sky: #dff4ff;
+    --cream: #fff8e8;
+    --paper: #fffdf7;
+    --gold: #f1c84b;
+    --ink: #18365f;
+    --muted: #60708a;
+    --line: #e6dcc3;
+    --shadow: 0 12px 34px rgba(36, 57, 77, .13);
+  }
+  * { box-sizing: border-box; }
+  html { min-height: 100%; background: var(--cream); }
+  body {
+    margin: 0;
+    color: var(--ink);
+    font-family: "Trebuchet MS", "Segoe UI", system-ui, -apple-system, sans-serif;
+    background:
+      radial-gradient(ellipse at 8% 3%, rgba(188, 232, 219, .62), transparent 28rem),
+      radial-gradient(ellipse at 94% 18%, rgba(196, 230, 255, .78), transparent 30rem),
+      var(--cream);
+    min-height: 100vh;
+  }
+  button, input { font: inherit; }
+  button { touch-action: manipulation; }
+  button:focus-visible, input:focus-visible { outline: 3px solid #f1bd31; outline-offset: 3px; }
+  .app { width: min(100% - 24px, 1040px); margin: 0 auto; padding: 18px 0 12px; }
+  .view[hidden] { display: none !important; }
+  .poster-frame {
+    overflow: hidden;
+    border: 4px solid #fff;
+    border-radius: 20px;
+    background: white;
+    box-shadow: var(--shadow);
+    line-height: 0;
+  }
+  .original-poster { display: block; width: 100%; height: auto; }
+  .welcome-card, .game-card, .result-card {
+    background: rgba(255, 253, 247, .97);
+    border: 1px solid rgba(213, 197, 157, .8);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+  }
+  .welcome-card { margin: 16px auto 0; padding: clamp(19px, 4vw, 30px); max-width: 760px; }
+  .eyebrow {
+    color: var(--teal-dark); font-size: .78rem; font-weight: 900;
+    letter-spacing: .14em; text-transform: uppercase; margin: 0 0 8px;
+  }
+  h1, h2, p { margin-top: 0; }
+  h1 { color: var(--navy); line-height: 1.08; margin-bottom: 12px; }
+  .welcome-title { font-size: clamp(1.65rem, 5vw, 2.4rem); text-align: center; }
+  .welcome-subtitle { display:block; margin-top: 5px; color: var(--teal); font-size: .76em; }
+  .intro-copy { color: #52657d; text-align: center; line-height: 1.55; margin-bottom: 20px; }
+  .name-label { display: block; font-weight: 850; color: var(--navy); margin-bottom: 8px; }
+  .name-row { display: flex; gap: 10px; }
+  .name-input {
+    display:block; flex: 1; min-width: 0; width:100%; border:2px solid #d6e4e7;
+    border-radius: 14px; padding: 14px 15px; background:#fff; color:var(--ink); font-size:1rem;
+  }
+  .primary-btn, .secondary-btn {
+    border: 0; border-radius: 15px; font-weight: 900; cursor: pointer;
+    min-height: 50px; padding: 13px 20px; transition: transform .15s ease, filter .15s ease;
+  }
+  .primary-btn { color:#fff; background:linear-gradient(180deg, #168f7c, #087365); box-shadow:0 5px 0 #075c51; }
+  .secondary-btn { color:var(--navy); background:#eaf4fc; border:1px solid #c9deef; }
+  .primary-btn:hover, .secondary-btn:hover { filter:brightness(1.04); transform:translateY(-1px); }
+  .primary-btn:active, .secondary-btn:active { transform:translateY(1px); }
+  .start-btn { white-space:nowrap; min-width: 132px; }
+  @media (max-width: 520px) {
+    .name-row { flex-direction: column; }
+    .name-input, .start-btn { width: 100%; min-height: 54px; }
+    .start-btn { white-space: normal; }
+  }
+  .form-error { min-height: 1.25em; color:#b8293e; font-size:.9rem; font-weight:750; margin:8px 0 0; }
+  .small-note { text-align:center; font-size:.88rem; color:#687b8c; margin:15px 0 0; }
+  .game-top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin: 2px 3px 14px; }
+  .mini-brand { display:flex; align-items:center; gap:10px; font-weight:950; color:var(--navy); }
+  .brand-mark { display:grid; place-items:center; width:42px; height:42px; border-radius:50%; background:#fff; border:2px solid #d1e7dc; font-size:1.25rem; }
+  .top-title { margin:0; font-size:clamp(.95rem, 3.2vw, 1.2rem); line-height:1.1; }
+  .top-title span { display:block; color:var(--teal); font-size:.88em; margin-top:4px; }
+  .progress-wrap { min-width:100px; width:33%; max-width:225px; }
+  .progress-label { display:flex; justify-content:space-between; gap:8px; color:#5d6e80; font-size:.79rem; font-weight:800; margin-bottom:6px; }
+  .progress-track { height:9px; background:#e6ece8; border-radius:99px; overflow:hidden; }
+  .progress-fill { width:0; height:100%; border-radius:99px; background:linear-gradient(90deg, #0d8d7b, #63bd87); transition:width .25s ease; }
+  .game-card { max-width:760px; margin:0 auto; padding:clamp(16px, 4vw, 28px); }
+  .question-line { display:flex; align-items:flex-start; gap:12px; margin:0 0 16px; }
+  .question-number { display:grid; place-items:center; flex:0 0 43px; height:43px; border-radius:50%; background:linear-gradient(145deg, #148f7b, #075c54); color:white; font-size:1.15rem; font-weight:950; box-shadow:0 3px 0 #064e48; }
+  .question-text { color:var(--navy); font-size:clamp(1.3rem, 4.2vw, 1.85rem); font-weight:950; line-height:1.25; margin:3px 0 0; }
+  .blank { color:var(--red); white-space:nowrap; letter-spacing:.05em; }
+  .scene-window { position:relative; width:100%; overflow:hidden; border-radius:16px; border:2px solid #e3e3cd; background:#eff4ef; aspect-ratio: 1.68; }
+  .scene-window img { position:absolute; display:block; max-width:none; object-fit:fill; }
+  .instruction { text-align:center; color:#687b8c; margin:15px 0 12px; font-size:.93rem; font-weight:700; }
+  .choices { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px; }
+  .answer-choice { min-height:58px; border-radius:16px; border:2px solid #d3e7f1; background:linear-gradient(180deg,#f1fbff,#d9f2ff); color:var(--navy); padding:12px 10px; font-size:clamp(.99rem, 3vw, 1.13rem); font-weight:900; cursor:pointer; box-shadow:0 3px 0 #bfdfeb; }
+  .answer-choice:nth-child(odd) { border-color:#f0ccd5; background:linear-gradient(180deg,#fff0f4,#ffe0e8); box-shadow:0 3px 0 #edc3cd; }
+  .answer-choice:hover:not(:disabled) { transform:translateY(-1px); filter:brightness(1.02); }
+  .answer-choice:disabled { cursor:default; opacity:1; }
+  .answer-choice.chosen-correct, .answer-choice.is-correct { background:#d8f4df; border-color:#6ebc80; color:#176a35; box-shadow:0 3px 0 #b0dfb9; }
+  .answer-choice.chosen-wrong { background:#ffe3e5; border-color:#e38b92; color:#a32335; box-shadow:0 3px 0 #edc3cd; }
+  .feedback { display:none; margin:15px 0 0; border-radius:14px; padding:13px 15px; font-size:1rem; line-height:1.45; font-weight:900; }
+  .feedback.visible { display:block; }
+  .feedback.good { color:#176a35; background:#e1f7e5; border:1px solid #b0dfb9; }
+  .feedback.bad { color:#a32335; background:#fff0f1; border:1px solid #f0c2c7; }
+  .actions { display:flex; justify-content:flex-end; margin-top:17px; }
+  .next-btn { min-width:175px; }
+  .result-card { max-width:760px; margin:0 auto; padding:clamp(21px, 4.5vw, 34px); text-align:center; }
+  .result-icon { font-size:3.5rem; line-height:1; margin:0 0 12px; }
+  .result-title { font-size:clamp(1.8rem, 5vw, 2.6rem); margin-bottom:7px; }
+  .result-name { color:#536b80; margin-bottom:18px; font-weight:750; }
+  .score-ring { width:148px; height:148px; margin:0 auto 18px; display:grid; place-content:center; border-radius:50%; background:conic-gradient(var(--teal) var(--score-angle, 0deg), #e7eee7 0); position:relative; }
+  .score-ring::before { content:""; position:absolute; inset:9px; background:#fffdf7; border-radius:50%; }
+  .score-value, .score-caption { position:relative; z-index:1; }
+  .score-value { font-size:2rem; color:var(--navy); font-weight:1000; line-height:1.05; }
+  .score-caption { color:#687b8c; font-size:.8rem; font-weight:900; margin-top:5px; }
+  .result-message { font-size:1.05rem; line-height:1.5; margin:0 auto 18px; max-width:520px; }
+  .review { text-align:left; list-style:none; padding:0; margin:20px 0; display:grid; gap:8px; }
+  .review li { display:flex; align-items:flex-start; gap:10px; padding:11px 12px; border-radius:12px; background:#f5f5ec; font-weight:750; line-height:1.35; }
+  .review .review-mark { flex:0 0 25px; font-size:1.05rem; }
+  .result-actions { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-top:19px; }
+  .license { text-align:center; color:#166d61; font-size:.85rem; font-weight:900; letter-spacing:.025em; margin:18px 0 6px; padding:12px 8px 0; }
+  .license::before { content:""; display:block; width:min(300px, 65%); height:3px; background:linear-gradient(90deg, transparent, #cc9b39, transparent); margin:0 auto 11px; }
+  .confetti-piece { position:fixed; z-index:9999; top:-18px; width:9px; height:14px; pointer-events:none; animation:confetti-fall 3.8s linear forwards; border-radius:2px; }
+  @keyframes confetti-fall { 0% { transform:translate3d(0,-5vh,0) rotate(0); opacity:1; } 100% { transform:translate3d(var(--drift, 30px),110vh,0) rotate(760deg); opacity:.85; } }
+  @media (max-width:520px) {
+    .app { width:min(100% - 16px, 1040px); padding-top:8px; }
+    .poster-frame { border-width:2px; border-radius:13px; }
+    .welcome-card { margin-top:10px; border-radius:18px; }
+    .name-row { flex-direction:column; }
+    .start-btn { width:100%; }
+    .game-top { align-items:flex-start; margin:3px 1px 12px; }
+    .brand-mark { width:36px; height:36px; }
+    .progress-wrap { width:31%; min-width:85px; padding-top:3px; }
+    .game-card { border-radius:19px; }
+    .question-line { gap:9px; }
+    .question-number { flex-basis:37px; height:37px; }
+    .scene-window { border-radius:12px; }
+    .choices { gap:9px; }
+    .answer-choice { min-height:58px; padding:10px 6px; border-radius:13px; }
+    .next-btn { width:100%; }
+    .actions { display:block; }
+    .result-card { border-radius:20px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; transition-duration:.01ms !important; }
+  }
+  @media print {
+    body { background:#fff; }
+    .app { width:100%; }
+    .welcome-card, .game-card, .result-card { box-shadow:none; }
+  }
+</style>
+
+<meta name="description" content="The Fourth Grade — Unit Three: an interactive English prepositions game." />
+<link rel="manifest" href="./manifest.webmanifest" />
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png" />
+<link rel="apple-touch-icon" href="./icon-192.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Fourth Grade" />
+<meta name="mobile-web-app-capable" content="yes" />
+
+</head>
+<body>
+<noscript><div style="margin:16px auto;max-width:760px;padding:16px;border:2px solid #d84b5a;border-radius:14px;background:#fff0f1;color:#8e2030;font:700 16px/1.5 Arial,sans-serif;text-align:center">This game needs JavaScript to work. Please save the HTML file to your device, then open it with Chrome, Edge, or Safari — not inside the WhatsApp preview.</div></noscript>
+<main class="app">
+  <section id="welcomeView" class="view" aria-labelledby="welcomeTitle">
+    <div class="poster-frame"><img id="originalPoster" class="original-poster" src="The_Fourth_Grade_Unit_Three_Poster.png" alt="Original poster: The Fourth Grade, Unit Three, Lost!" /></div>
+    <div class="welcome-card">
+      <p class="eyebrow" style="text-align:center">Picture Game</p>
+      <h1 id="welcomeTitle" class="welcome-title">The Fourth Grade<span class="welcome-subtitle">Unit Three</span></h1>
+      <p class="intro-copy">Look at the pictures and choose the correct preposition.<br>There are 7 questions. Good luck!</p>
+      <form id="startForm" autocomplete="off" novalidate>
+        <label for="studentName" class="name-label">Enter your name, then tap Start Game</label>
+        <div class="name-row">
+          <input id="studentName" class="name-input" name="studentName" type="text" maxlength="60" placeholder="Student's name" aria-describedby="nameError" enterkeyhint="go" />
+          <button id="startButton" class="primary-btn start-btn" type="submit">Start Game&nbsp; →</button>
+        </div>
+        <p id="nameError" class="form-error" role="alert"></p>
+      </form>
+      <p class="small-note">7 questions · One answer per question · Works offline after the first visit</p>
+      <p id="offlineStatus" class="small-note" role="status" aria-live="polite" style="margin-top:7px">Checking offline support…</p>
+    </div>
+  </section>
+
+  <section id="gameView" class="view" hidden aria-labelledby="gameTitle">
+    <header class="game-top">
+      <div class="mini-brand">
+        <div class="brand-mark" aria-hidden="true">🇵🇸</div>
+        <h1 id="gameTitle" class="top-title">The Fourth Grade<span>Unit Three</span></h1>
+      </div>
+      <div class="progress-wrap" aria-label="Quiz progress">
+        <div class="progress-label"><span>Progress</span><span id="progressText">1 / 7</span></div>
+        <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+      </div>
+    </header>
+    <section class="game-card">
+      <div class="question-line">
+        <div id="questionNumber" class="question-number" aria-hidden="true">1</div>
+        <h2 id="questionText" class="question-text">The cat is <span class="blank">_____</span> the chair.</h2>
+      </div>
+      <div id="sceneWindow" class="scene-window">
+        <img id="sceneImage" alt="Picture for the question" draggable="false" />
+      </div>
+      <p class="instruction">Choose the correct answer.</p>
+      <div id="choices" class="choices"></div>
+      <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+      <div class="actions"><button id="nextButton" class="primary-btn next-btn" type="button" hidden>Next Question&nbsp; →</button></div>
+    </section>
+  </section>
+
+  <section id="resultView" class="view" hidden aria-labelledby="resultTitle">
+    <div class="result-card">
+      <div id="resultIcon" class="result-icon" aria-hidden="true">🌟</div>
+      <p class="eyebrow">Quiz complete</p>
+      <h1 id="resultTitle" class="result-title">Great work!</h1>
+      <p id="resultName" class="result-name"></p>
+      <div id="scoreRing" class="score-ring" aria-label="Final score">
+        <div id="scoreValue" class="score-value">7 / 7</div>
+        <div id="scoreCaption" class="score-caption">100% CORRECT</div>
+      </div>
+      <p id="resultMessage" class="result-message"></p>
+      <ul id="answerReview" class="review" aria-label="Answer review"></ul>
+      <div class="result-actions">
+        <button id="playAgainButton" class="primary-btn" type="button">Play Again ↻</button>
+        <button id="posterButton" class="secondary-btn" type="button">Back to Poster</button>
+      </div>
+    </div>
+  </section>
+  <footer class="license">CC BY NC Majd Al-Kurdi @2026</footer>
+</main>
+<script>
+'use strict';
+const POSTER_WIDTH = 1536;
+const POSTER_HEIGHT = 1024;
+
+const questions = [
+  { prompt: 'The cat is ___ the chair.', answers: ['under', 'on'], correct: 'on', crop: {x:28,y:306,w:345,h:200}, alt: 'A cat sitting on a chair.' },
+  { prompt: 'The bag is ___ the desk.', answers: ['under', 'next to'], correct: 'under', crop: {x:408,y:306,w:347,h:200}, alt: 'A school bag underneath a desk.' },
+  { prompt: 'The ball is ___ the box.', answers: ['in', 'behind'], correct: 'in', crop: {x:795,y:306,w:332,h:200}, alt: 'A ball inside a box.' },
+  { prompt: 'The book is ___ the lamp.', answers: ['next to', 'in front of'], correct: 'next to', crop: {x:1160,y:306,w:348,h:200}, alt: 'A book next to a lamp.' },
+  { prompt: 'The girl is ___ the door.', answers: ['behind', 'in front of'], correct: 'behind', crop: {x:27,y:650,w:346,h:204}, alt: 'A girl standing behind an open door.' },
+  { prompt: 'The flowers are ___ the tree.', answers: ['between', 'in front of'], correct: 'in front of', crop: {x:408,y:650,w:347,h:204}, alt: 'Pots of flowers in front of a tree.' },
+  { prompt: 'The girl is ___ the two boys.', answers: ['between', 'next to'], correct: 'between', crop: {x:797,y:650,w:330,h:204}, alt: 'A girl sitting between two boys.' }
+];
+const welcomeView = document.getElementById('welcomeView');
+const gameView = document.getElementById('gameView');
+const resultView = document.getElementById('resultView');
+const startForm = document.getElementById('startForm');
+const studentName = document.getElementById('studentName');
+const nameError = document.getElementById('nameError');
+const sceneWindow = document.getElementById('sceneWindow');
+const sceneImage = document.getElementById('sceneImage');
+const questionText = document.getElementById('questionText');
+const questionNumber = document.getElementById('questionNumber');
+const choicesBox = document.getElementById('choices');
+const feedback = document.getElementById('feedback');
+const nextButton = document.getElementById('nextButton');
+const progressText = document.getElementById('progressText');
+const progressFill = document.getElementById('progressFill');
+let player = '';
+let currentIndex = 0;
+let responses = [];
+let selected = false;
+
+// All pictures use the exact original poster image embedded in this file.
+sceneImage.src = document.getElementById('originalPoster').src;
+
+function showView(view) {
+  [welcomeView, gameView, resultView].forEach(v => { v.hidden = v !== view; });
+  window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+}
+function fitSceneCrop() {
+  const q = questions[currentIndex];
+  if (!q || sceneWindow.hidden) return;
+  const scale = sceneWindow.clientWidth / q.crop.w;
+  sceneWindow.style.aspectRatio = `${q.crop.w} / ${q.crop.h}`;
+  sceneImage.style.width = `${POSTER_WIDTH * scale}px`;
+  sceneImage.style.height = `${POSTER_HEIGHT * scale}px`;
+  sceneImage.style.left = `${-q.crop.x * scale}px`;
+  sceneImage.style.top = `${-q.crop.y * scale}px`;
+}
+function renderQuestion() {
+  const q = questions[currentIndex];
+  selected = false;
+  questionNumber.textContent = String(currentIndex + 1);
+  questionText.innerHTML = q.prompt.replace('___', '<span class="blank">_____</span>');
+  sceneImage.alt = q.alt;
+  choicesBox.innerHTML = '';
+  q.answers.forEach(answer => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'answer-choice';
+    button.textContent = answer;
+    button.addEventListener('click', () => chooseAnswer(answer, button));
+    choicesBox.appendChild(button);
+  });
+  feedback.className = 'feedback';
+  feedback.textContent = '';
+  nextButton.hidden = true;
+  nextButton.textContent = currentIndex === questions.length - 1 ? 'See My Result  ✓' : 'Next Question  →';
+  progressText.textContent = `${currentIndex + 1} / ${questions.length}`;
+  progressFill.style.width = `${currentIndex / questions.length * 100}%`;
+  requestAnimationFrame(fitSceneCrop);
+}
+function chooseAnswer(answer, button) {
+  if (selected) return;
+  selected = true;
+  const q = questions[currentIndex];
+  const isCorrect = answer === q.correct;
+  responses[currentIndex] = { chosen: answer, correct: isCorrect };
+  Array.from(choicesBox.querySelectorAll('button')).forEach(b => {
+    b.disabled = true;
+    if (b.textContent === q.correct) b.classList.add('is-correct');
+  });
+  if (isCorrect) {
+    button.classList.add('chosen-correct');
+    feedback.className = 'feedback visible good';
+    feedback.textContent = 'Great!';
+  } else {
+    button.classList.add('chosen-wrong');
+    feedback.className = 'feedback visible bad';
+    feedback.textContent = `Oops! The correct answer is “${q.correct}”.`;
+  }
+  nextButton.hidden = false;
+  progressFill.style.width = `${(currentIndex + 1) / questions.length * 100}%`;
+}
+function startGame(event) {
+  event.preventDefault();
+  const name = studentName.value.trim();
+  if (!name) {
+    nameError.textContent = 'Please enter your name first.';
+    studentName.focus();
+    return;
+  }
+  nameError.textContent = '';
+  player = name;
+  currentIndex = 0;
+  responses = [];
+  showView(gameView);
+  renderQuestion();
+}
+function goNext() {
+  if (!selected) return;
+  if (currentIndex < questions.length - 1) {
+    currentIndex += 1;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+function showResults() {
+  const score = responses.filter(r => r && r.correct).length;
+  const pct = Math.round(score / questions.length * 100);
+  document.getElementById('resultName').textContent = `Well done, ${player}!`;
+  document.getElementById('scoreValue').textContent = `${score} / ${questions.length}`;
+  document.getElementById('scoreCaption').textContent = `${pct}% CORRECT`;
+  document.getElementById('scoreRing').style.setProperty('--score-angle', `${pct * 3.6}deg`);
+  const perfect = score === questions.length;
+  document.getElementById('resultIcon').textContent = perfect ? '🏆' : score >= 5 ? '🌟' : '💪';
+  document.getElementById('resultTitle').textContent = perfect ? 'Perfect Score!' : score >= 5 ? 'Great Work!' : 'Keep Practising!';
+  document.getElementById('resultMessage').textContent = perfect
+    ? 'Amazing! You got every answer right. Enjoy your applause!'
+    : `You got ${score} out of ${questions.length} correct. Keep practising — you can try again!`;
+  const review = document.getElementById('answerReview');
+  review.innerHTML = '';
+  questions.forEach((q, i) => {
+    const li = document.createElement('li');
+    const mark = document.createElement('span');
+    mark.className = 'review-mark';
+    const wasCorrect = !!(responses[i] && responses[i].correct);
+    mark.textContent = wasCorrect ? '✅' : '💡';
+    const sentence = document.createElement('span');
+    sentence.textContent = `Q${i + 1}. ${q.prompt.replace('___', q.correct + (q.prompt.endsWith('.') ? '' : ''))}`;
+    li.append(mark, sentence);
+    review.appendChild(li);
+  });
+  progressFill.style.width = '100%';
+  showView(resultView);
+  if (perfect) {
+    createConfetti();
+    playApplause();
+  }
+}
+function createConfetti() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const colors = ['#0c8a78', '#f0c543', '#e65363', '#2b76bb', '#8ecf9a', '#e9a8ce'];
+  for (let i = 0; i < 72; i++) {
+    const piece = document.createElement('span');
+    piece.className = 'confetti-piece';
+    piece.style.left = `${Math.random() * 100}vw`;
+    piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = `${Math.random() * .85}s`;
+    piece.style.animationDuration = `${2.8 + Math.random() * 1.4}s`;
+    piece.style.setProperty('--drift', `${Math.round(Math.random() * 150 - 75)}px`);
+    piece.style.width = `${6 + Math.random() * 7}px`;
+    piece.style.height = `${9 + Math.random() * 10}px`;
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 5000);
+  }
+}
+function playApplause() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    ctx.resume().catch(() => {});
+    const length = Math.floor(ctx.sampleRate * 0.09);
+    const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / length);
+    const baseTime = ctx.currentTime;
+    for (let i = 0; i < 95; i++) {
+      const when = baseTime + Math.random() * 3.4;
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 900 + Math.random() * 2100;
+      filter.Q.value = 0.7 + Math.random() * 1.5;
+      const gain = ctx.createGain();
+      const loudness = 0.035 + Math.random() * 0.13;
+      gain.gain.setValueAtTime(0.001, when);
+      gain.gain.linearRampToValueAtTime(loudness, when + 0.004);
+      gain.gain.exponentialRampToValueAtTime(0.001, when + 0.075);
+      source.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      source.start(when);
+      source.stop(when + 0.085);
+    }
+    setTimeout(() => ctx.close().catch(() => {}), 4500);
+  } catch (e) {
+    // The perfect-score celebration still appears visually if audio is unavailable.
+  }
+}
+// Explicit button and Enter-key handlers are more reliable on mobile browsers and local HTML files.
+startForm.addEventListener('submit', startGame);
+studentName.addEventListener('keydown', event => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    startGame(event);
+  }
+});
+studentName.addEventListener('input', () => { if (studentName.value.trim()) nameError.textContent = ''; });
+nextButton.addEventListener('click', goNext);
+document.getElementById('playAgainButton').addEventListener('click', () => {
+  currentIndex = 0;
+  responses = [];
+  showView(gameView);
+  renderQuestion();
+});
+document.getElementById('posterButton').addEventListener('click', () => showView(welcomeView));
+window.addEventListener('resize', () => { if (!gameView.hidden) fitSceneCrop(); });
+if ('ResizeObserver' in window) {
+  const observer = new ResizeObserver(() => { if (!gameView.hidden) fitSceneCrop(); });
+  observer.observe(sceneWindow);
+}
+</script>
+
+<script>
+// Offline support is enabled only on HTTPS (or localhost), which is required for service workers.
+(function () {
+  const status = document.getElementById('offlineStatus');
+  if (!('serviceWorker' in navigator)) {
+    if (status) status.textContent = 'Offline install is not available in this browser. You can still play while online.';
+    return;
+  }
+  if (!/^https:$/.test(location.protocol) && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+    if (status) status.textContent = 'For offline use, open this game from its secure HTTPS website first.';
+    return;
+  }
+  navigator.serviceWorker.register('./sw.js', { scope: './' }).then(async registration => {
+    try {
+      await navigator.serviceWorker.ready;
+      if (status) status.textContent = 'Offline support is ready on this device ✓';
+    } catch (_) {
+      if (status) status.textContent = 'Keep this page online while offline support finishes setting up.';
+    }
+  }).catch(() => {
+    if (status) status.textContent = 'Could not prepare offline support. Refresh once while online.';
+  });
+})();
+</script>
+
+</body>
+</html>
